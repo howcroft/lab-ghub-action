@@ -1,0 +1,28 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description: 'CloudFormation template for GitHub Actions OIDC Provider. This template creates an OIDC provider that can be imported by other stacks.'
+Parameters:
+  ThumbprintList:
+    Type: String 
+    Default: 6938fd4d98bab03faadb97b34396831e3780aea1
+    Description: A thumbprint of an Open ID Connector is a SHA1 hash of the public certificate of the host
+
+Resources:
+  IDCProvider:
+    Type: AWS::IAM::OIDCProvider
+    Properties:
+      Url: "https://token.actions.githubusercontent.com"
+      ClientIdList:
+        - "sts.amazonaws.com"
+      ThumbprintList:
+        - !Ref ThumbprintList
+    DeletionPolicy: Retain
+# Remove the output section when creating the stack (with import)
+# Then, add the outputs and apply a changeset over the imported stack
+Outputs:
+  OIDCProviderArn:
+    Description: OIDC Provider ARN for GitHub Actions
+    Value: !Ref IDCProvider
+    Export:
+      Name: !Sub ${AWS::StackName}-OIDCProviderArn
+
