@@ -218,7 +218,6 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       Path: "/"
-      RoleName: WebappRole
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -261,7 +260,7 @@ Resources:
           Description: "Github Actions role"
           Policies:
           
-          - PolicyName: 'CodeDeployRoleforGitHub-policy'
+          - PolicyName: !Sub '{AWS::StackName}-CodeDeployRoleforGitHub-policy'
             PolicyDocument:
               Version: '2012-10-17'
               Statement:
@@ -282,7 +281,7 @@ Resources:
   WebappApplication:
     Type: AWS::CodeDeploy::Application
     Properties:
-      ApplicationName: CodeDeployAppNameWithASG
+      ApplicationName: !Sub ${AWS::StackName}-CodeDeployAppNameWithASG
   WebappDeploymentGroup:
     Type: AWS::CodeDeploy::DeploymentGroup
     Properties:
